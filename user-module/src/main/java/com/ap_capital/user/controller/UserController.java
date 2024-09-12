@@ -1,9 +1,9 @@
 package com.ap_capital.user.controller;
 
 import com.ap_capital.common.model.user_module.User;
-import com.ap_capital.common.req.user_module.AddUserReq;
-import com.ap_capital.common.req.user_module.RechargeRequest;
-import com.ap_capital.common.req.user_module.UpdateUserReq;
+import com.ap_capital.common.req.user_module.user.AddUserReq;
+import com.ap_capital.common.req.user_module.user.RechargeRequest;
+import com.ap_capital.common.req.user_module.user.UpdateUserReq;
 import com.ap_capital.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +21,15 @@ public class UserController {
     }
 
     @PostMapping
-    public void addUser(@RequestBody AddUserReq req) {
+    public ResponseEntity<?> addUser(@RequestBody AddUserReq req) {
         userService.addUser(req);
+        return ResponseEntity.ok("Add user succeed");
     }
 
     @PutMapping("/{userId}")
-    public void updateUser(@PathVariable Long userId, @RequestBody UpdateUserReq req) {
+    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UpdateUserReq req) {
         userService.updateUser(userId, req);
+        return ResponseEntity.ok("Update user succeed");
     }
 
     @GetMapping

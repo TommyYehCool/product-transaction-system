@@ -1,4 +1,4 @@
-package com.ap_capital.common.req.merchant_module;
+package com.ap_capital.common.req.merchant_module.merchant;
 
 import lombok.Data;
 

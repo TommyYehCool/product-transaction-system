@@ -2,8 +2,8 @@ package com.ap_capital.user.service;
 
 import com.ap_capital.common.cnst.CommonStatus;
 import com.ap_capital.common.model.user_module.User;
-import com.ap_capital.common.req.user_module.AddUserReq;
-import com.ap_capital.common.req.user_module.UpdateUserReq;
+import com.ap_capital.common.req.user_module.user.AddUserReq;
+import com.ap_capital.common.req.user_module.user.UpdateUserReq;
 import com.ap_capital.user.mapper.UserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -33,6 +33,9 @@ public class UserService {
         User user = new User();
         BeanUtils.copyProperties(req, user);
         user.setUserId(userId);
+        if (req.getPrepaidAccountBalance() != null) {
+            user.setPrepaidAccountBalance(req.getPrepaidAccountBalance());
+        }
         user.setStatus(req.getStatus().getValue());
         userMapper.update(user);
     }
@@ -41,8 +44,8 @@ public class UserService {
         return userMapper.getAll();
     }
 
-    public User getByUserId(Long id) {
-        return userMapper.getByUserId(id);
+    public User getByUserId(Long userId) {
+        return userMapper.getByUserId(userId);
     }
 
     public void recharge(Long userId, BigDecimal amount) {

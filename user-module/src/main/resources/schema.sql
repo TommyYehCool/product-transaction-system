@@ -5,7 +5,7 @@ CREATE TABLE users (
     prepaid_account_balance DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     status INT NOT NULL DEFAULT 1,
     created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
+    updated_at DATETIME
 );
 
 DROP TABLE IF EXISTS orders;
@@ -18,8 +18,5 @@ CREATE TABLE orders (
     total_amount DECIMAL(10,2) NOT NULL,
     order_status VARCHAR(20) NOT NULL,
     created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (merchant_id) REFERENCES merchants(merchant_id),
-    FOREIGN KEY (product_sku) REFERENCES products(product_sku)
+    updated_at DATETIME
 );

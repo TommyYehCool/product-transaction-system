@@ -9,20 +9,38 @@ import java.util.List;
 public interface MerchantMapper {
 
     @Select("""
+        SELECT * FROM merchants
+    """)
+    @Results(
+            id = "merchantResultMap",
+            value = {
+                    @Result(column = "merchant_id", property = "merchantId"),
+                    @Result(column = "name", property = "name"),
+                    @Result(column = "account_balance", property = "accountBalance"),
+                    @Result(column = "status", property = "status"),
+                    @Result(column = "created_at", property = "createdAt"),
+                    @Result(column = "updated_at", property = "updatedAt")
+            }
+    )
+    List<Merchant> findAll();
+
+    @Select("""
         SELECT * FROM merchants WHERE merchant_id = #{merchantId}
     """)
+    @ResultMap("merchantResultMap")
     Merchant findById(@Param("merchantId") Long merchantId);
 
     @Select("""
-        SELECT * FROM merchants
+        SELECT * FROM merchants WHERE name = #{name}
     """)
-    List<Merchant> findAll();
+    @ResultMap("merchantResultMap")
+    Merchant findByName(String name);
 
     @Insert("""
         INSERT INTO merchants 
-            (name, account_balance, created_at) 
+            (name, account_balance, status, created_at) 
         VALUES 
-            (#{name}, #{accountBalance}, #{createdAt})
+            (#{name}, #{accountBalance}, #{status}, #{createdAt})
     """)
     @Options(useGeneratedKeys = true, keyProperty = "merchantId")
     void insert(Merchant merchant);
@@ -31,7 +49,10 @@ public interface MerchantMapper {
         UPDATE 
             merchants 
         SET 
-            name = #{name}, account_balance = #{accountBalance}, updated_at = #{updatedAt} 
+            name = #{name}, 
+            account_balance = #{accountBalance},
+            status = #{status}, 
+            updated_at = #{updatedAt} 
         WHERE 
             merchant_id = #{merchantId}
     """)

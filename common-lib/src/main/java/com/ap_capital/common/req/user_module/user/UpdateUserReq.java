@@ -1,4 +1,4 @@
-package com.ap_capital.common.req.user_module;
+package com.ap_capital.common.req.user_module.user;
 
 import com.ap_capital.common.cnst.CommonStatus;
 import lombok.Data;

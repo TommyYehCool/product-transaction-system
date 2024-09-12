@@ -1,4 +1,4 @@
-package com.ap_capital.common.req.user_module;
+package com.ap_capital.common.req.user_module.user;
 
 import lombok.Data;
 

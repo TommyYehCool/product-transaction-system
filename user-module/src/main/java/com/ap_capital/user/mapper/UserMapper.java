@@ -9,19 +9,19 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Select("SELECT * FROM users WHERE user_id = #{id}")
-    User getByUserId(Long id);
-
     @Select("""
         SELECT * FROM users
     """)
     List<User> getAll();
 
+    @Select("SELECT * FROM users WHERE user_id = #{userId}")
+    User getByUserId(Long userId);
+
     @Insert("""
         INSERT INTO users 
-            (name, prepaid_account_balance, created_at) 
+            (name, prepaid_account_balance, status, created_at) 
         VALUES
-            (#{name}, #{prepaidAccountBalance}, #{createdAt})
+            (#{name}, #{prepaidAccountBalance}, #{status}, #{createdAt})
         """)
     @Options(useGeneratedKeys = true, keyProperty = "userId")
     void insert(User user);
@@ -31,7 +31,8 @@ public interface UserMapper {
             users 
         SET 
             name = #{name}, 
-            prepaid_account_balance = #{prepaidAccountBalance}, 
+            prepaid_account_balance = #{prepaidAccountBalance},
+            status = #{status},  
             updated_at = #{updatedAt} 
         WHERE 
             user_id = #{userId}
