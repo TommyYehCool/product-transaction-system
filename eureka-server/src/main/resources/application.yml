@@ -1,0 +1,22 @@
+server:
+  host: localhost
+  port: 8080
+
+eureka:
+  # 服務註冊中心的設定
+  instance:
+    # 是否使用IP地址作為主機名
+    prefer-ip-address: true
+    # IP地址
+    ip-address: ${server.host}
+    # 服務實例ID
+    instance-id: ${server.host}:${server.port}
+  # 服務註冊中心的客戶端設定
+  client:
+    # 是否向服務註冊中心註冊自己
+    register-with-eureka: false
+    # 是否檢索服務
+    fetch-registry: false
+    # 註冊中心的訪問地址
+    serviceUrl:
+      defaultZone: http://${server.host}:${server.port}/eureka

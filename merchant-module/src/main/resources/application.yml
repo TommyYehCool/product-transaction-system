@@ -1,0 +1,37 @@
+server:
+  host: localhost
+  port: 8081
+
+spring:
+  application:
+    name: merchant-module
+  datasource:
+    url: jdbc:h2:file:~/Documents/h2db/merchantdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      schema-locations: classpath:schema.sql
+#      data-locations: classpath:data.sql
+      mode: always
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: ${server.host}
+    instance-id: ${server.host}:${server.port}
+    appname: merchant-module
+  client:
+    serviceUrl:
+      defaultZone: http://${server.host}:8080/eureka
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 60000
