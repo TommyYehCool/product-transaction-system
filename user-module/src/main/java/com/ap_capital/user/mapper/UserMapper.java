@@ -12,10 +12,22 @@ public interface UserMapper {
     @Select("""
         SELECT * FROM users
     """)
-    List<User> getAll();
+    @Results(
+            id = "userResultMap",
+            value = {
+                @Result(column = "user_id", property = "userId"),
+                @Result(column = "name", property = "name"),
+                @Result(column = "prepaid_account_balance", property = "prepaidAccountBalance"),
+                @Result(column = "status", property = "status"),
+                @Result(column = "created_at", property = "createdAt"),
+                @Result(column = "updated_at", property = "updatedAt")
+            }
+    )
+    List<User> findAll();
 
     @Select("SELECT * FROM users WHERE user_id = #{userId}")
-    User getByUserId(Long userId);
+    @ResultMap("userResultMap")
+    User findById(Long userId);
 
     @Insert("""
         INSERT INTO users 

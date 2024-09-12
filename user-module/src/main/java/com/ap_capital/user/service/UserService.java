@@ -41,11 +41,11 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userMapper.getAll();
+        return userMapper.findAll();
     }
 
-    public User getByUserId(Long userId) {
-        return userMapper.getByUserId(userId);
+    public User findById(Long userId) {
+        return userMapper.findById(userId);
     }
 
     public void recharge(Long userId, BigDecimal amount) {
