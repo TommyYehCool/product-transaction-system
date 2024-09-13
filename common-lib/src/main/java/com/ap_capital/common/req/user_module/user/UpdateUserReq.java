@@ -7,9 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 public class UpdateUserReq {
-
     private String name;
     private BigDecimal prepaidAccountBalance;
     private CommonStatus status;
-
 }
