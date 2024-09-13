@@ -53,6 +53,6 @@ public class UserService {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero.");
         }
-        userMapper.recharge(userId, amount);
+        userMapper.recharge(userId, amount, new Date());
     }
 }

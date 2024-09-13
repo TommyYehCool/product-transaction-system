@@ -9,6 +9,7 @@ import com.ap_capital.merchant.service.MerchantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -98,6 +99,18 @@ public class MerchantController {
 
         // 返回查詢結果
         return ResponseEntity.ok(product);
+    }
+
+    /**
+     * 商品賣出增加餘額
+     */
+    @PutMapping("/{merchantId}/increment-revenue")
+    public ResponseEntity<Void> incrementMerchantRevenue(
+            @PathVariable("merchantId") Long merchantId,
+            @RequestParam("amount") BigDecimal amount
+    ) {
+        merchantService.incrementMerchantRevenue(merchantId, amount);
+        return ResponseEntity.ok().build();
     }
 
     /**

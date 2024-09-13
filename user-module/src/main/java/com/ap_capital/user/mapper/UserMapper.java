@@ -4,6 +4,7 @@ import com.ap_capital.common.model.user_module.User;
 import org.apache.ibatis.annotations.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -53,11 +54,22 @@ public interface UserMapper {
 
     @Update("""
         UPDATE 
+            users 
+        SET 
+            prepaid_account_balance = prepaid_account_balance - #{amount},
+            updated_at = #{updatedAt} 
+        WHERE 
+            user_id = #{userId}
+    """)
+    void paid(@Param("userId") Long userId, @Param("amount") BigDecimal amount, @Param("updatedAt") Date updatedAt);
+
+    @Update("""
+        UPDATE 
             users
         SET
             prepaid_account_balance = prepaid_account_balance + #{amount}
         WHERE
             user_id = #{userId}
     """)
-    void recharge(@Param("userId") Long userId, @Param("amount") BigDecimal amount);
+    void recharge(@Param("userId") Long userId, @Param("amount") BigDecimal amount, @Param("updatedAt") Date updatedAt);
 }

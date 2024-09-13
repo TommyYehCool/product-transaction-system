@@ -114,6 +114,10 @@ public class MerchantService {
         return product;
     }
 
+    public void incrementMerchantRevenue(Long merchantId, BigDecimal amount) {
+        merchantMapper.increaseMerchantAccountBalance(merchantId, amount, new Date());
+    }
+
     public void settlement() {
         // TODO - MerchantService settlement
     }

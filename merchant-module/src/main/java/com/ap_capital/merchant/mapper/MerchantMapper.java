@@ -3,6 +3,8 @@ package com.ap_capital.merchant.mapper;
 import com.ap_capital.common.model.merchant_module.Merchant;
 import org.apache.ibatis.annotations.*;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -57,4 +59,19 @@ public interface MerchantMapper {
             merchant_id = #{merchantId}
     """)
     void update(Merchant merchant);
+
+    @Update("""
+        UPDATE 
+            merchants 
+        SET 
+            account_balance = account_balance + #{amount},
+            updated_at = #{updatedAt} 
+        WHERE 
+            merchant_id = #{merchantId}
+    """)
+    void increaseMerchantAccountBalance(
+            @Param("merchantId") Long merchantId,
+            @Param("amount") BigDecimal amount,
+            @Param("updatedAt") Date updatedAt
+    );
 }

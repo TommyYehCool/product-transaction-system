@@ -3,6 +3,7 @@ package com.ap_capital.merchant.mapper;
 import com.ap_capital.common.model.merchant_module.Product;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -54,4 +55,14 @@ public interface ProductMapper {
             product_sku = #{productSku}
     """)
     void update(Product product);
+
+    @Update("""
+        UPDATE 
+            products 
+        SET
+            available_quantity = available_quantity - #{quantity}, updated_at = #{updatedAt} 
+        WHERE 
+            product_sku = #{productSku}
+    """)
+    void productSold(String productSku, int quantity, Date updatedAt);
 }

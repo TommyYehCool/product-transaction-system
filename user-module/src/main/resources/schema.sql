@@ -16,7 +16,5 @@ CREATE TABLE orders (
     product_sku VARCHAR(64) NOT NULL,
     quantity INT NOT NULL,
     total_amount DECIMAL(10,2) NOT NULL,
-    order_status VARCHAR(20) NOT NULL,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME
+    created_at DATETIME NOT NULL
 );
