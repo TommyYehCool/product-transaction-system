@@ -1,7 +1,6 @@
 package com.ap_capital.user.service;
 
 import com.ap_capital.common.feign_client.merchant_module.MerchantFeignClient;
-import com.ap_capital.common.model.merchant_module.Product;
 import com.ap_capital.common.model.user_module.Order;
 import com.ap_capital.common.model.user_module.User;
 import com.ap_capital.common.req.merchant_module.merchant.CheckProductReq;
@@ -9,14 +8,12 @@ import com.ap_capital.common.req.merchant_module.merchant.ProductSoldReq;
 import com.ap_capital.common.req.user_module.order.CreateOrderReq;
 import com.ap_capital.common.resp.merchant_module.merchat.CheckProductResp;
 import com.ap_capital.common.utils.IDGenerator;
-import com.ap_capital.common.utils.UUIDUtils;
 import com.ap_capital.user.mapper.OrderMapper;
 import com.ap_capital.user.mapper.UserMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Service
