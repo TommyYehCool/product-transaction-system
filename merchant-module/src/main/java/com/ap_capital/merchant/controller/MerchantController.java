@@ -2,18 +2,15 @@ package com.ap_capital.merchant.controller;
 
 import com.ap_capital.common.model.merchant_module.Merchant;
 import com.ap_capital.common.model.merchant_module.Product;
-import com.ap_capital.common.req.merchant_module.merchant.AddInventoryRequest;
-import com.ap_capital.common.req.merchant_module.merchant.AddMerchantReq;
-import com.ap_capital.common.req.merchant_module.merchant.UpdateMerchantReq;
+import com.ap_capital.common.req.merchant_module.merchant.*;
+import com.ap_capital.common.resp.merchant_module.merchat.CheckProductResp;
 import com.ap_capital.merchant.service.MerchantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/merchants")
 public class MerchantController {
 
     private final MerchantService merchantService;
@@ -25,7 +22,7 @@ public class MerchantController {
     /**
      * 查詢所有商家
      */
-    @GetMapping
+    @GetMapping("/merchants")
     public ResponseEntity<List<Merchant>> findAll() {
         List<Merchant> merchants = merchantService.findAll();
         return ResponseEntity.ok(merchants);
@@ -34,7 +31,7 @@ public class MerchantController {
     /**
      * 根據商家名稱查詢商家
      */
-    @GetMapping("/by-name")
+    @GetMapping("/merchants/by-name")
     public ResponseEntity<Merchant> findByName(@RequestParam String name) {
         Merchant merchant = merchantService.findByName(name);
         if (merchant != null) {
@@ -47,7 +44,7 @@ public class MerchantController {
     /**
      * 新增商家
      */
-    @PostMapping
+    @PostMapping("/merchants")
     public ResponseEntity<?> addMerchant(@RequestBody AddMerchantReq req) {
         merchantService.addMerchant(req);
         return ResponseEntity.ok("Add merchant succeed");
@@ -56,7 +53,7 @@ public class MerchantController {
     /**
      * 更新商家
      */
-    @PutMapping("/{merchantId}")
+    @PutMapping("/merchants/{merchantId}")
     public ResponseEntity<Void> updateMerchant(
             @PathVariable Long merchantId,
             @RequestBody UpdateMerchantReq req
@@ -68,10 +65,10 @@ public class MerchantController {
     /**
      * 增加商品庫存
      */
-    @PostMapping("/{merchantId}/inventory")
+    @PostMapping("/merchants/{merchantId}/inventory")
     public ResponseEntity<?> upsertInventory(
             @PathVariable Long merchantId,
-            @RequestBody AddInventoryRequest request) {
+            @RequestBody AddInventoryReq request) {
 
         // 呼叫 service 方法來處理庫存添加
         merchantService.upsertInventory(
@@ -89,7 +86,7 @@ public class MerchantController {
     /**
      * 查詢商品庫存
      */
-    @GetMapping("/{merchantId}/inventory")
+    @GetMapping("/merchants/{merchantId}/inventory")
     public ResponseEntity<Product> checkInventory(
             @PathVariable Long merchantId,
             @RequestParam String productName
@@ -102,21 +99,31 @@ public class MerchantController {
     }
 
     /**
-     * 商品賣出增加餘額
+     * 確認產品庫存並計算訂單總金額
      */
-    @PutMapping("/{merchantId}/increment-revenue")
-    public ResponseEntity<Void> incrementMerchantRevenue(
-            @PathVariable("merchantId") Long merchantId,
-            @RequestParam("amount") BigDecimal amount
+    @PostMapping("/merchants/check-product")
+    public ResponseEntity<CheckProductResp> checkProduct(
+        @RequestBody CheckProductReq req
     ) {
-        merchantService.incrementMerchantRevenue(merchantId, amount);
+        CheckProductResp resp = merchantService.checkProduct(req);
+        return ResponseEntity.ok(resp);
+    }
+
+    /**
+     * 商品賣出
+     */
+    @PostMapping("/merchants/product-sold")
+    public ResponseEntity<Void> productSold(
+            @RequestBody ProductSoldReq req
+    ) {
+        merchantService.productSold(req);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 日常結算
      */
-    @PostMapping("/{merchantId}/settlement")
+    @PostMapping("/merchants/{merchantId}/settlement")
     public void settlement() {
         merchantService.settlement();
     }

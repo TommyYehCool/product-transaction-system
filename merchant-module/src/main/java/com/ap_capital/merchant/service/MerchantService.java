@@ -4,7 +4,10 @@ import com.ap_capital.common.cnst.CommonStatus;
 import com.ap_capital.common.model.merchant_module.Merchant;
 import com.ap_capital.common.model.merchant_module.Product;
 import com.ap_capital.common.req.merchant_module.merchant.AddMerchantReq;
+import com.ap_capital.common.req.merchant_module.merchant.CheckProductReq;
+import com.ap_capital.common.req.merchant_module.merchant.ProductSoldReq;
 import com.ap_capital.common.req.merchant_module.merchant.UpdateMerchantReq;
+import com.ap_capital.common.resp.merchant_module.merchat.CheckProductResp;
 import com.ap_capital.common.utils.UUIDUtils;
 import com.ap_capital.merchant.mapper.MerchantMapper;
 import com.ap_capital.merchant.mapper.ProductMapper;
@@ -114,8 +117,36 @@ public class MerchantService {
         return product;
     }
 
-    public void incrementMerchantRevenue(Long merchantId, BigDecimal amount) {
-        merchantMapper.increaseMerchantAccountBalance(merchantId, amount, new Date());
+    public CheckProductResp checkProduct(CheckProductReq req) {
+        Product product = productMapper.findBySku(req.getProductSku());
+        if (product == null) {
+            return CheckProductResp.builder()
+                    .result(false)
+                    .message("Product not found with SKU: " + req.getProductSku())
+                    .build();
+        }
+
+        if (product.getAvailableQuantity() < req.getQuantity()) {
+            return CheckProductResp.builder()
+                    .result(false)
+                    .message("Insufficient stock for product: " + product.getName())
+                    .build();
+        }
+
+        BigDecimal totalAmount = product.getPrice().multiply(BigDecimal.valueOf(req.getQuantity()));
+
+        return CheckProductResp.builder()
+                .result(true)
+                .message("ok to sell")
+                .merchantId(product.getMerchantId())
+                .totalAmount(totalAmount)
+                .build();
+    }
+
+    public void productSold(ProductSoldReq req) {
+        productMapper.productSold(req.getProductSku(), req.getQuantity(), new Date());
+
+        merchantMapper.increaseMerchantAccountBalance(req.getMerchantId(), req.getAmount(), new Date());
     }
 
     public void settlement() {

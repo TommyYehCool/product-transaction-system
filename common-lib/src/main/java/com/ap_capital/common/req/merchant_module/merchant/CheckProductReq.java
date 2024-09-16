@@ -1,13 +1,11 @@
 package com.ap_capital.common.req.merchant_module.merchant;
 
+import lombok.Builder;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
-public class AddInventoryRequest {
+@Builder
+public class CheckProductReq {
     private String productSku;
-    private String productName;
-    private BigDecimal price;
     private int quantity;
 }
