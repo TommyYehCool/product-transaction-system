@@ -1,16 +1,20 @@
 package com.ap_capital.merchant.service;
 
 import com.ap_capital.common.cnst.CommonStatus;
+import com.ap_capital.common.cnst.TransactionType;
 import com.ap_capital.common.model.merchant_module.Merchant;
 import com.ap_capital.common.model.merchant_module.Product;
+import com.ap_capital.common.model.merchant_module.Transaction;
 import com.ap_capital.common.req.merchant_module.merchant.AddMerchantReq;
 import com.ap_capital.common.req.merchant_module.merchant.CheckProductReq;
 import com.ap_capital.common.req.merchant_module.merchant.ProductSoldReq;
 import com.ap_capital.common.req.merchant_module.merchant.UpdateMerchantReq;
 import com.ap_capital.common.resp.merchant_module.merchat.CheckProductResp;
+import com.ap_capital.common.utils.IDGenerator;
 import com.ap_capital.common.utils.UUIDUtils;
 import com.ap_capital.merchant.mapper.MerchantMapper;
 import com.ap_capital.merchant.mapper.ProductMapper;
+import com.ap_capital.merchant.mapper.TransactionMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -24,10 +28,12 @@ public class MerchantService {
 
     private final MerchantMapper merchantMapper;
     private final ProductMapper productMapper;
+    private final TransactionMapper transactionMapper;
 
-    public MerchantService(MerchantMapper merchantMapper, ProductMapper productMapper) {
+    public MerchantService(MerchantMapper merchantMapper, ProductMapper productMapper, TransactionMapper transactionMapper) {
         this.merchantMapper = merchantMapper;
         this.productMapper = productMapper;
+        this.transactionMapper = transactionMapper;
     }
 
     public List<Merchant> findAll() {
@@ -147,6 +153,21 @@ public class MerchantService {
         productMapper.productSold(req.getProductSku(), req.getQuantity(), new Date());
 
         merchantMapper.increaseMerchantAccountBalance(req.getMerchantId(), req.getAmount(), new Date());
+
+        Transaction transaction
+                = Transaction.builder()
+                    .transactionId(IDGenerator.getTransactionId())
+                    .orderId(req.getOrderId())
+                    .userId(req.getUserId())
+                    .merchantId(req.getMerchantId())
+                    .productSku(req.getProductSku())
+                    .quantity(req.getQuantity())
+                    .totalAmount(req.getAmount())
+                    .transactionDate(new Date())
+                    .transactionType(TransactionType.purchase.name())
+                    .createdAt(new Date())
+                    .build();
+        transactionMapper.insertTransaction(transaction);
     }
 
     public void settlement() {

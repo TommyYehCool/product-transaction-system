@@ -10,7 +10,7 @@ CREATE TABLE users (
 
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
-    order_id VARCHAR(64) PRIMARY KEY,
+    order_id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     merchant_id BIGINT NOT NULL,
     product_sku VARCHAR(64) NOT NULL,

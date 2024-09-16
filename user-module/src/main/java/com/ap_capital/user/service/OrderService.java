@@ -8,6 +8,7 @@ import com.ap_capital.common.req.merchant_module.merchant.CheckProductReq;
 import com.ap_capital.common.req.merchant_module.merchant.ProductSoldReq;
 import com.ap_capital.common.req.user_module.order.CreateOrderReq;
 import com.ap_capital.common.resp.merchant_module.merchat.CheckProductResp;
+import com.ap_capital.common.utils.IDGenerator;
 import com.ap_capital.common.utils.UUIDUtils;
 import com.ap_capital.user.mapper.OrderMapper;
 import com.ap_capital.user.mapper.UserMapper;
@@ -60,7 +61,7 @@ public class OrderService {
             throw new RuntimeException("Insufficient balance in user's prepaid account.");
         }
 
-        final String orderId = UUIDUtils.getUUID();
+        final Long orderId = IDGenerator.getOrderId();
 
         // 4. 從用戶預付帳戶中扣除相應金額
         userMapper.paid(userId, checkProductResult.getTotalAmount(), new Date());
@@ -68,23 +69,26 @@ public class OrderService {
         // 5. 商戶模組處理商品賣出
         ProductSoldReq productSoldReq
                 = ProductSoldReq.builder()
+                    .orderId(orderId)
                     .merchantId(checkProductResult.getMerchantId())
                     .productSku(orderReq.getProductSku())
+                    .userId(userId)
                     .quantity(orderReq.getQuantity())
                     .amount(checkProductResult.getTotalAmount())
                     .build();
         merchantFeignClient.productSold(productSoldReq);
 
-        // 9. 保存訂單到數據庫
-        Order order = Order.builder()
-                .orderId(orderId)
-                .userId(userId)
-                .merchantId(checkProductResult.getMerchantId())
-                .productSku(orderReq.getProductSku())
-                .quantity(orderReq.getQuantity())
-                .totalAmount(checkProductResult.getTotalAmount())
-                .createdAt(new Date())
-                .build();
+        // 6. 保存訂單到數據庫
+        Order order
+                = Order.builder()
+                    .orderId(orderId)
+                    .userId(userId)
+                    .merchantId(checkProductResult.getMerchantId())
+                    .productSku(orderReq.getProductSku())
+                    .quantity(orderReq.getQuantity())
+                    .totalAmount(checkProductResult.getTotalAmount())
+                    .createdAt(new Date())
+                    .build();
         orderMapper.insert(order);
     }
 }
