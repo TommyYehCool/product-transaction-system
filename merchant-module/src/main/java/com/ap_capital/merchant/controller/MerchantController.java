@@ -123,10 +123,8 @@ public class MerchantController {
     /**
      * 日常結算
      */
-    @PostMapping("/merchants/{merchantId}/settlement")
+    @PostMapping("/merchants/settlement")
     public void settlement() {
         merchantService.settlement();
     }
-
-
 }

@@ -27,6 +27,12 @@ public interface MerchantMapper {
     List<Merchant> findAll();
 
     @Select("""
+        SELECT * FROM merchants WHERE `status` = 1
+    """)
+    @ResultMap("merchantResultMap")
+    List<Merchant> findAllActivateMerchants();
+
+    @Select("""
         SELECT * FROM merchants WHERE merchant_id = #{merchantId}
     """)
     @ResultMap("merchantResultMap")

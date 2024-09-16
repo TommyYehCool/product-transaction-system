@@ -13,6 +13,10 @@ public class IDGenerator {
         return getCurrentTimeAsId();
     }
 
+    public static Long getReconciliationId() {
+        return getCurrentTimeAsId();
+    }
+
     private static Long getCurrentTimeAsId() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
