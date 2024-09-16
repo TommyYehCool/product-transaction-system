@@ -7,12 +7,10 @@ import com.ap_capital.common.req.merchant_module.merchant.CheckProductReq;
 import com.ap_capital.common.req.merchant_module.merchant.ProductSoldReq;
 import com.ap_capital.common.req.user_module.order.CreateOrderReq;
 import com.ap_capital.common.resp.merchant_module.merchat.CheckProductResp;
-import com.ap_capital.common.utils.IDGenerator;
 import com.ap_capital.user.mapper.OrderMapper;
 import com.ap_capital.user.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,7 +44,6 @@ public class OrderServiceTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        mockStatic(IDGenerator.class);
     }
 
     @Test
@@ -72,7 +69,6 @@ public class OrderServiceTest {
         // 使用 mock 的時候需要保證使用 mock 對象
         when(userMapper.findById(userId)).thenReturn(user);
         when(merchantFeignClient.checkProduct(any(CheckProductReq.class))).thenReturn(ResponseEntity.ok(checkProductResp));
-        when(IDGenerator.getOrderId()).thenReturn(1L); // 這裡需要使用 PowerMockito 來處理靜態方法
 
         orderService.createOrder(userId, orderReq);
 
