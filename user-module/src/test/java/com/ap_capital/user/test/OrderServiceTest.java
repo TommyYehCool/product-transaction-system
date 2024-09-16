@@ -1,4 +1,4 @@
-package com.ap_capital.user.service;
+package com.ap_capital.user.test;
 
 import com.ap_capital.common.feign_client.merchant_module.MerchantFeignClient;
 import com.ap_capital.common.model.user_module.Order;
@@ -50,11 +50,9 @@ public class OrderServiceTest {
     @Transactional
     public void testCreateOrder() {
         Long userId = 1L;
-        CreateOrderReq orderReq
-                = CreateOrderReq.builder()
-                    .productSku("sku123")
-                    .quantity(2)
-                    .build();
+        CreateOrderReq orderReq = new CreateOrderReq();
+        orderReq.setProductSku("sku123");
+        orderReq.setQuantity(2);
 
         User user = new User();
         user.setUserId(userId);
@@ -83,11 +81,9 @@ public class OrderServiceTest {
     @Test
     public void testCreateOrder_InsufficientBalance() {
         Long userId = 1L;
-        CreateOrderReq orderReq
-                = CreateOrderReq.builder()
-                    .productSku("sku123")
-                    .quantity(2)
-                    .build();
+        CreateOrderReq orderReq = new CreateOrderReq();
+        orderReq.setProductSku("sku123");
+        orderReq.setQuantity(2);
 
         User user = new User();
         user.setUserId(userId);

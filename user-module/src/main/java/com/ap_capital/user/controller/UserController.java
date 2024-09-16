@@ -5,8 +5,8 @@ import com.ap_capital.common.req.user_module.order.CreateOrderReq;
 import com.ap_capital.common.req.user_module.user.AddUserReq;
 import com.ap_capital.common.req.user_module.user.RechargeRequest;
 import com.ap_capital.common.req.user_module.user.UpdateUserReq;
-import com.ap_capital.user.service.OrderService;
-import com.ap_capital.user.service.UserService;
+import com.ap_capital.user.test.OrderService;
+import com.ap_capital.user.test.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

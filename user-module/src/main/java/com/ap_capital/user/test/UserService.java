@@ -1,4 +1,4 @@
-package com.ap_capital.user.service;
+package com.ap_capital.user.test;
 
 import com.ap_capital.common.cnst.CommonStatus;
 import com.ap_capital.common.model.user_module.User;
